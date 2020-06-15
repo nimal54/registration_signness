@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta content="A new Flutter project." name="description">
+
+    <!-- iOS meta tags & icons -->
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="registration" name="apple-mobile-web-app-title">
+    <link href="icons/Icon-192.png" rel="apple-touch-icon">
+
+    <!-- Favicon -->
+    <link href="favicon.png" rel="shortcut icon" type="image/png"/>
+
+    <title>registration</title>
+    <link href="manifest.json" rel="manifest">
+
+    <style>
+
+.loader {
+  border: 11px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 11px solid salmon;
+  border-left: 11px solid steelblue;
+  border-bottom: 11px solid rosybrown;
+  border-right: 11px solid turquoise;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 0.5s linear infinite;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+  </style>
+</head>
+
+<body>
+<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>
+<script src="main.dart.js" type="application/javascript"></script>
+
+
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSyDD-odQI4WgB1wHL8yIeUdBUl15qPy03S4",
+  authDomain: "registration-39652.firebaseapp.com",
+  databaseURL: "https://registration-39652.firebaseio.com",
+  projectId: "registration-39652",
+  storageBucket: "registration-39652.appspot.com",
+  messagingSenderId: "924375464210",
+  appId: "1:924375464210:web:f2b9ada2a98e01b6421bcb",
+  measurementId: "G-143YWK4DYY"
+};
+firebase.initializeApp(firebaseConfig);
+</script>
+
+
+
+
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('flutter_service_worker.js');
+      });
+    }
+
+</script>
+<div class="center">
+  <div class="loader"></div>
+</div>
+
+
+
+<script src="main.dart.js" type="application/javascript"></script>
+</body>
+</html>
