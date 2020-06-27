@@ -119,9 +119,12 @@ class CustomAlertDialog extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 Divider(),
-                Text(
-                  content,
-                  textAlign: TextAlign.center,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  child: Text(
+                    content,
+                    //textAlign: TextAlign.center,
+                  ),
                 ),
                 SizedBox(height: 40.0),
                 SizedBox(

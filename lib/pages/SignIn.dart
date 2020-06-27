@@ -80,7 +80,7 @@ class _SignInState extends State<SignIn> {
     final loginButton = Material(
       elevation: 10.0,
       borderRadius: BorderRadius.circular(10.0),
-      color: Colors.green[200],
+      color: Colors.green,
       child: MaterialButton(
         onPressed: () {
           // validateForm();
@@ -125,7 +125,7 @@ class _SignInState extends State<SignIn> {
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(16.0),
                 children: <Widget>[
-                  Text("Application Id9"),
+                  Text("Application Id"),
                   applicationField,
                   const SizedBox(height: 20.0),
                   Text("Date Of Birth"),

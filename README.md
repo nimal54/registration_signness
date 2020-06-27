@@ -7,7 +7,11 @@ A new Flutter project.
 This project is a starting point for a Flutter application.
 
 
-Developer - Nimal Viju
+
+
+- Developer - [Nimal Viju](nimalviju54@gmail.com)
+
+
 #Flutter
 #Dart
 #Firebase

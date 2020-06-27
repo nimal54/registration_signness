@@ -8,9 +8,8 @@ class AboutPage extends StatefulWidget {
 class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
-    return 
-    Expanded(child: 
-    Container(
+    return Expanded(
+        child: Container(
       width: double.infinity,
       child: Text("About page"),
       color: Colors.black12,

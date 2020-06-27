@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:registration/helpers/theme_helper.dart';
 import 'package:registration/pages/AboutTab.dart';
-import 'package:registration/pages/subFolder/BasicInformation.dart';
-import 'package:registration/pages/subFolder/ContactInformation.dart';
 import 'package:registration/pages/subFolder/EducationalInformation.dart';
 import 'package:registration/pages/subFolder/dashboard_workspace.dart';
 import 'package:toast/toast.dart';
@@ -19,16 +17,21 @@ class _DashboardState extends State<Dashboard> {
 
   int _tabIndex = 1;
 
-  Widget button(String _text, IconData _icon, int _tabValue) {
+  Widget button(
+      String _text, IconData _icon, int _tabValue, String toastMessage) {
     return Material(
         elevation: 10.0,
         borderRadius: BorderRadius.circular(10.0),
-        color: Colors.white24,
+        color: _tabValue == 1
+            ? Colors.greenAccent[100]
+            : _tabValue == 2
+                ? Colors.yellowAccent[100]
+                : _tabValue == 3 ? Colors.redAccent[100] : null,
         child: MaterialButton(
             height: 25,
             onPressed: () {
-              Toast.show("Please fill up the details...", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+              Toast.show(toastMessage, context,
+                  duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
               // setState(() {
               //   _tabIndex = _tabValue;
               // });
@@ -96,45 +99,46 @@ class _DashboardState extends State<Dashboard> {
                         width: context.isMobile ? 70 : 305,
                         height: 30,
                         child: context.isMobile
-                            ? button("", Icons.border_color, 1)
-                            : button(
-                                "Basic Information", Icons.border_color, 1),
+                            ? button("", Icons.border_color, 1,
+                                "Details already filled in signup")
+                            : button("Basic Information", Icons.border_color, 1,
+                                "Details already filled in signup"),
                       ),
                       SizedBox(width: 15, height: 45),
                       Container(
                         width: context.isMobile ? 70 : 305,
                         height: 30,
                         child: context.isMobile
-                            ? button("", Icons.contact_mail, 2)
-                            : button(
-                                "Contact Information", Icons.contact_mail, 2),
+                            ? button("", Icons.contact_mail, 2,
+                                "Please fill up the contact details..")
+                            : button("Contact Information", Icons.contact_mail,
+                                2, "Please fill up the contact details.."),
                       ),
                       SizedBox(width: 15, height: 45),
                       Container(
                         width: context.isMobile ? 70 : 305,
                         height: 30,
                         child: context.isMobile
-                            ? button(" ", Icons.school, 3)
-                            : button(
-                                "Educational Information", Icons.school, 3),
+                            ? button(" ", Icons.school, 3,
+                                "Please choose the branch preference..")
+                            : button("Educational Information", Icons.school, 3,
+                                "Please choose the branch preference.."),
                       ),
                       SizedBox(width: 25, height: 45),
                     ],
                   )),
               Expanded(
-                  child: Container(
-                      width: double.infinity,
-                      child: RootPage()
+                  child: Container(width: double.infinity, child: RootPage()
                       /*AnimatedSwitcher(
                           duration: Duration(milliseconds: 300),
                           child: _tabIndex == 1
-                              ? BasicInformation()
+                              ? ContactInformation()
                               : _tabIndex == 2
                                   ? ContactInformation()
                                   : _tabIndex == 3
                                       ? EducationalInformation()
                                       : null)*/
-                                      )),
+                      )),
             ],
           ),
         )));

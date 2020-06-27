@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: ThemeHelper.backgroundRed,
         body: SingleChildScrollView(
             child: Container(
-          color: Colors.white,
+          color: ThemeHelper.backgroundRed,
           margin: context.isMobile
               ? EdgeInsets.fromLTRB(8, 10, 8, 20)
               : EdgeInsets.fromLTRB(100, 20, 100, 100),
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                                 ? EdgeInsets.fromLTRB(8, 10, 8, 10)
                                 : EdgeInsets.fromLTRB(100, 80, 100, 80),
                             child: Text(
-                              "Signness Online Engineering Management Admission - 2020",
+                              "Signness Engineering Management Admission Portal- 2020",
                               style: GoogleFonts.lato(
                                   fontWeight: FontWeight.w800,
                                   color: Colors.white,
@@ -129,11 +129,12 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Material(
                                   elevation: 10.0,
-                                  color: Colors.red,
+                                  color: ThemeHelper.backgroundRed,
                                   borderRadius: BorderRadius.circular(50.0),
                                   child: InkWell(
                                       onTap: () => {},
                                       child: Container(
+                                        color: ThemeHelper.backgroundRed,
                                         width: 105,
                                         height: 30,
                                         child: button("Home", Icons.home, 1),
@@ -142,11 +143,12 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(width: 15, height: 15),
                                 Material(
                                   elevation: 10.0,
-                                  color: Colors.red,
+                                  color: ThemeHelper.backgroundRed,
                                   borderRadius: BorderRadius.circular(50.0),
                                   child: InkWell(
                                       onTap: () => {},
                                       child: Container(
+                                        color: ThemeHelper.backgroundRed,
                                         width: 105,
                                         height: 30,
                                         child:

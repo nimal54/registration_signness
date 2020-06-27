@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:registration/pages/subFolder/BasicInformation.dart';
-
-
+import 'package:registration/pages/subFolder/ContactInformation.dart';
+import 'package:registration/pages/subFolder/CoursePreference.dart';
+import 'package:registration/pages/subFolder/EducationalInformation.dart';
 
 class RootPage extends StatefulWidget {
   @override
   _RootPageState createState() => new _RootPageState();
 }
+
 class _RootPageState extends State<RootPage> {
-  BasicInformation _basicInformation;
+  ContactInformation _contactInformation;
+  EducationalInformation _educationalInformation;
+  CoursePreference _coursePreference;
 
   Widget currentPage;
 
   @override
   void initState() {
     super.initState();
-    _basicInformation = BasicInformation(this.callback);
-
-    currentPage = _basicInformation;
+    _contactInformation = ContactInformation(this.callback);
+    currentPage = _contactInformation;
   }
 
   void callback(Widget nextPage) {
@@ -28,21 +30,6 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        body: currentPage
-    );
+    return new Scaffold(body: currentPage);
   }
 }
-
-
-/*
-Container(
-      child: FlatButton(
-      onPressed: () {
-        this.widget.callback(new ContactInformation());
-      },
-      child: new Text('Go to a new page but keep root, just replace this feed part'),
-    )
-    );
-    
-    */
