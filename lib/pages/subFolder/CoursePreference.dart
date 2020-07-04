@@ -112,8 +112,11 @@ class _CoursePreferenceState extends State<CoursePreference> {
       try {
         Firestore.instance
             .collection("Students")
-            .document(global.currentUser)
-            .updateData({"coursePref": p_course}).then((value) => {
+            .document(global.currentUserId)
+            .updateData({
+          "coursePref": p_course,
+          "profileStatus": "complete"
+        }).then((value) => {
                   this
                       .widget
                       .callback(new EducationalInformation(this.callback))
@@ -126,9 +129,7 @@ class _CoursePreferenceState extends State<CoursePreference> {
             context,
             duration: Toast.LENGTH_LONG,
             gravity: Toast.CENTER);
-      setState(() {
-        
-      });
+        setState(() {});
       } catch (error) {
         Toast.show(
             error + "Unable to update your data to server\n\nTry Again...",
@@ -142,7 +143,6 @@ class _CoursePreferenceState extends State<CoursePreference> {
           duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
       return ("Choose options..");
     }
-
   }
 
   @override

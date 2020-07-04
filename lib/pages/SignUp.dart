@@ -24,6 +24,7 @@ class _SignUpState extends State<SignUp> {
       inputCourse,
       inputQuota,
       errorMessage;
+  int temp_id;
 
   _termsAndCondition(
       BuildContext context, AlertDialogType type, String contentData) {
@@ -54,7 +55,8 @@ class _SignUpState extends State<SignUp> {
   }
 
   validateForm() async {
-    if (formKey.currentState.validate() && inputGender != null &&
+    if (formKey.currentState.validate() &&
+        inputGender != null &&
         inputCourse != null &&
         inputQuota != null) {
       formKey.currentState.save();
@@ -64,69 +66,42 @@ class _SignUpState extends State<SignUp> {
         _isLoading = true;
       });
       try {
-        await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: inputEmail, password: inputDateOfBirth)
-            .then((result) async {
-          global.currentUser = result.user.uid.toString();
-          print(result.user.uid.toString() + "--user uid");
-          print("global store value user -- " + global.currentUser);
-          await Firestore.instance
-              .collection('Students')
-              .document(result.user.uid)
-              .setData({
-            "name": inputFullName,
-            "dob&pass": inputDateOfBirth,
-            "applicationId": result.user.uid,
-            "phone": inputPhoneNumber,
-            "gender": inputGender,
-            "course": inputCourse,
-            "quota": inputQuota,
-            "email": inputEmail
-          });
-          _popupAndSaveBasicDetailsToFirestore(
-              context, AlertDialogType.SUCCESS);
-          Navigator.pushReplacementNamed(context, "/home");
-        });
+        await Firestore.instance
+            .collection("id_Increment")
+            .document("id")
+            .get()
+            .then((value) => {
+                  temp_id = int.parse(value.data['user_id'].toString()),
+                  temp_id = temp_id + 1,
+                  Firestore.instance
+                      .collection('Students')
+                      .document(temp_id.toString())
+                      .setData({
+                    "applicationId": temp_id.toString(),
+                    "dob&pass": inputDateOfBirth,
+                    "name": inputFullName,
+                    "email": inputEmail,
+                    "course": inputCourse,
+                    "phone": inputPhoneNumber,
+                    "gender": inputGender,                    
+                    "quota": inputQuota,
+                    "profileStatus": "start"
+                  }),
+                  Firestore.instance
+                      .collection("id_Increment")
+                      .document("id")
+                      .updateData({'user_id': temp_id}).then((value) => {
+                            _popupAndSaveBasicDetailsToFirestore(
+                                context, AlertDialogType.SUCCESS),
+                            Navigator.pushReplacementNamed(context, "/home")
+                          })
+                });
       } catch (error) {
         setState(() {
           _isLoading = false;
         });
-        switch (error.code) {
-          case "ERROR_INVALID_EMAIL":
-            errorMessage =
-                "Your email address appears to be malformed or remove whitespace from end";
-            print(errorMessage);
-            Toast.show(errorMessage, context,
-                duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
-            break;
-          case "ERROR_WRONG_PASSWORD":
-            errorMessage = "Your password is wrong.";
-            print(errorMessage);
-            Toast.show(errorMessage, context,
-                duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-            break;
-          case "ERROR_USER_NOT_FOUND":
-            errorMessage = "User with this email doesn't exist.";
-            print(errorMessage);
-            Toast.show(errorMessage, context,
-                duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
-            break;
-          case "ERROR_OPERATION_NOT_ALLOWED":
-            errorMessage = "Signing in with Email and Password is not enabled.";
-            print(errorMessage);
-            Toast.show(errorMessage, context,
-                duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
-            break;
-          default:
-            errorMessage = "An undefined Error happened.\n Enter Valid Email ";
-            print(errorMessage);
-            Toast.show(errorMessage, context,
-                duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
-        }
       }
     } else {
-      print("esle");
       Toast.show("Please fill up the details.", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
       return ("Validation Error");
@@ -156,36 +131,37 @@ class _SignUpState extends State<SignUp> {
             ),
             validator: (val) => val.length == 0 ? "Enter Full Name" : null,
             onSaved: (val) => inputFullName = val));
-    final gender =  Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.circular(10.0),
-      child: Container(
-        color: Colors.transparent,
-        width: double.infinity,
-        child: Card(
-            child: DropdownButton(
-          isExpanded: true,
-          value: inputGender,
-          style: TextStyle(fontSize: 14, color: Colors.blueGrey),
-          icon: Icon(Icons.keyboard_arrow_down),
-          underline: Container(color: Colors.red),
-          onChanged: (newValue) {
-            setState(() {
-              inputGender = newValue.toString();
-            });
-          },
-          items: <String>["Male", "Female"].map((category) {
-            return DropdownMenuItem(
-              child: Container(
-                  margin: EdgeInsets.only(left: 4, right: 4),
-                  child: Text(category,
-                      style: TextStyle(fontSize: 14, color: Colors.blueGrey))),
-              value: category,
-            );
-          }).toList(),
-        )),
-      ));
-    
+    final gender = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(10.0),
+        child: Container(
+          color: Colors.transparent,
+          width: double.infinity,
+          child: Card(
+              child: DropdownButton(
+            isExpanded: true,
+            value: inputGender,
+            style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+            icon: Icon(Icons.keyboard_arrow_down),
+            underline: Container(color: Colors.red),
+            onChanged: (newValue) {
+              setState(() {
+                inputGender = newValue.toString();
+              });
+            },
+            items: <String>["Male", "Female"].map((category) {
+              return DropdownMenuItem(
+                child: Container(
+                    margin: EdgeInsets.only(left: 4, right: 4),
+                    child: Text(category,
+                        style:
+                            TextStyle(fontSize: 14, color: Colors.blueGrey))),
+                value: category,
+              );
+            }).toList(),
+          )),
+        ));
+
     final email = Material(
         elevation: 10.0,
         borderRadius: BorderRadius.circular(10.0),
@@ -255,66 +231,67 @@ class _SignUpState extends State<SignUp> {
       ),
     );
     final course = Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.circular(10.0),
-      child: Container(
-        color: Colors.transparent,
-        width: double.infinity,
-        child: Card(
-            child: DropdownButton(
-          isExpanded: true,
-          value: inputCourse,
-          style: TextStyle(fontSize: 14, color: Colors.blueGrey),
-          icon: Icon(Icons.keyboard_arrow_down),
-          underline: Container(color: Colors.red),
-          onChanged: (newValue) {
-            setState(() {
-              inputCourse = newValue.toString();
-            });
-          },
-          items: <String>["B.Tech", "M.Tech"].map((category) {
-            return DropdownMenuItem(
-              child: Container(
-                  margin: EdgeInsets.only(left: 4, right: 4),
-                  child: Text(category,
-                      style: TextStyle(fontSize: 14, color: Colors.blueGrey))),
-              value: category,
-            );
-          }).toList(),
-        )),
-      ));
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(10.0),
+        child: Container(
+          color: Colors.transparent,
+          width: double.infinity,
+          child: Card(
+              child: DropdownButton(
+            isExpanded: true,
+            value: inputCourse,
+            style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+            icon: Icon(Icons.keyboard_arrow_down),
+            underline: Container(color: Colors.red),
+            onChanged: (newValue) {
+              setState(() {
+                inputCourse = newValue.toString();
+              });
+            },
+            items: <String>["B.Tech", "M.Tech"].map((category) {
+              return DropdownMenuItem(
+                child: Container(
+                    margin: EdgeInsets.only(left: 4, right: 4),
+                    child: Text(category,
+                        style:
+                            TextStyle(fontSize: 14, color: Colors.blueGrey))),
+                value: category,
+              );
+            }).toList(),
+          )),
+        ));
 
     final quota = Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.circular(10.0),
-      child: Container(
-        color: Colors.transparent,
-        width: double.infinity,
-        child: Card(
-            child: DropdownButton(
-          isExpanded: true,
-          value: inputQuota,
-          style: TextStyle(fontSize: 14, color: Colors.blueGrey),
-          icon: Icon(Icons.keyboard_arrow_down),
-          underline: Container(color: Colors.red),
-          onChanged: (newValue) {
-            setState(() {
-              inputQuota = newValue.toString();
-            });
-          },
-          items:  <String>["Management"].map((category) {
-            return DropdownMenuItem(
-              child: Container(
-                  margin: EdgeInsets.only(left: 4, right: 4),
-                  child: Text(category,
-                      style: TextStyle(fontSize: 14, color: Colors.blueGrey))),
-              value: category,
-            );
-          }).toList(),
-        )),
-      ));
-    
-   
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(10.0),
+        child: Container(
+          color: Colors.transparent,
+          width: double.infinity,
+          child: Card(
+              child: DropdownButton(
+            isExpanded: true,
+            value: inputQuota,
+            style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+            icon: Icon(Icons.keyboard_arrow_down),
+            underline: Container(color: Colors.red),
+            onChanged: (newValue) {
+              setState(() {
+                inputQuota = newValue.toString();
+              });
+            },
+            items: <String>["Management"].map((category) {
+              return DropdownMenuItem(
+                child: Container(
+                    margin: EdgeInsets.only(left: 4, right: 4),
+                    child: Text(category,
+                        style:
+                            TextStyle(fontSize: 14, color: Colors.blueGrey))),
+                value: category,
+              );
+            }).toList(),
+          )),
+        ));
+
     final registerButton = Material(
       elevation: 10.0,
       borderRadius: BorderRadius.circular(10.0),

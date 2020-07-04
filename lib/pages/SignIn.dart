@@ -1,6 +1,11 @@
+import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:toast/toast.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:registration/helpers/global.dart' as global;
 
 class SignIn extends StatefulWidget {
   @override
@@ -12,12 +17,48 @@ class _SignInState extends State<SignIn> {
   String inputApplicationNumber, inputDateOfBirth;
 
   validateForm() async {
-    print("inside");
-    if (formKey.currentState.validate()) {
+    String result;
+    if (formKey.currentState.validate() &&
+        inputApplicationNumber != null &&
+        inputDateOfBirth != null) {
       formKey.currentState.save();
       print(inputDateOfBirth + "--" + inputApplicationNumber);
+
+      try {
+        await Firestore.instance
+            .collection('Students')
+            .where('applicationId', isEqualTo: inputApplicationNumber)
+            .where('dob&pass', isEqualTo: inputDateOfBirth)
+            .getDocuments()
+            .then((res) => {
+                  global.currentUserId = res.documents[0].data['applicationId'],
+                  result = res.documents[0].data['profileStatus'],
+                  print("ProfileStatus =---> " + result.toString()),
+                  if (result.contains("start"))
+                    {Navigator.pushReplacementNamed(context, "/dashboard")}
+                  else if (result.contains("complete"))
+                    {}
+                });
+      } catch (error) {
+        print("eeeeeeerr->" + error.toString());
+        print("eeeeeeerrvvv->" + error.hashCode.toString());
+        Toast.show(
+            "Invalid Password and application id \n\n Try again !!!", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+      }
+    } else if (!(formKey.currentState.validate()) && inputDateOfBirth == null) {
+      Toast.show("Enter Application id and Password", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+    } else if (formKey.currentState.validate() && inputDateOfBirth == null) {
+      Toast.show("enter password (DOB) ", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+    } else if (inputApplicationNumber == null && inputDateOfBirth != null) {
+      Toast.show("enter Application id ", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
     } else {
       print("esle");
+      Toast.show("Try Again... ", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
       return ("Validation Error");
     }
   }
@@ -43,8 +84,12 @@ class _SignInState extends State<SignIn> {
                 contentPadding: EdgeInsets.all(14.0),
                 fillColor: Colors.grey[200]),
             validator: (val) =>
-                val.length == 0 ? "Enter Application No:" : "null",
-            onSaved: (val) => inputApplicationNumber = val));
+                val.length == 0 ? "Enter Application No:" : null,
+            onChanged: (val) => {
+                  setState(() {
+                    inputApplicationNumber = val;
+                  })
+                }));
 
     final dOBField = Material(
       elevation: 10.0,
@@ -83,8 +128,8 @@ class _SignInState extends State<SignIn> {
       color: Colors.green,
       child: MaterialButton(
         onPressed: () {
-          // validateForm();
-          Navigator.pushReplacementNamed(context, "/dashboard");
+          validateForm();
+          // Navigator.pushReplacementNamed(context, "/dashboard");
         },
         child: Text(
           'Login',
@@ -131,7 +176,23 @@ class _SignInState extends State<SignIn> {
                   Text("Date Of Birth"),
                   dOBField,
                   const SizedBox(height: 30.0),
-                  loginButton
+                  loginButton,
+                  const SizedBox(height: 20.0),
+                  Container(
+                      child: GestureDetector(
+                          child: Icon(Icons.refresh),
+                          onTap: () {
+                            setState(() {
+                              print("adfdafadfsd");
+                              print(inputApplicationNumber.toString() +
+                                  "---iiiiiii");
+                              inputDateOfBirth = null;
+                              inputApplicationNumber = null;
+                              print(inputApplicationNumber.toString() +
+                                  "---eiiiiii");
+                            });
+                          })),
+                  Center(child: Text("Reset")),
                 ])));
   }
 }

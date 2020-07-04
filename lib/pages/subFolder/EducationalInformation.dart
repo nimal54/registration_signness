@@ -159,8 +159,8 @@ class _EducationalInformationState extends State<EducationalInformation> {
       };
       try {
         await Firestore.instance
-            .collection("moreDetails")
-            .document(global.currentUser)
+            .collection("Students")
+            .document(global.currentUserId)
             .updateData({"educationDetails": contactDetails}).then((value) =>
                 {this.widget.callback(new CoursePreference(this.callback))});
       } catch (error) {

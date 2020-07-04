@@ -195,8 +195,8 @@ class _ContactInformationState extends State<ContactInformation> {
       };
       try {
         await Firestore.instance
-            .collection("moreDetails")
-            .document(global.currentUser)
+            .collection("Students")
+            .document(global.currentUserId)
             .updateData({"contactDetails": contactDetails}).then((value) => {
                   this
                       .widget
