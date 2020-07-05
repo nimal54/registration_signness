@@ -7,7 +7,6 @@ import 'package:registration/pages/SinglePreview.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:registration/helpers/global.dart' as global;
 
-
 class PreviewPage extends StatefulWidget {
   @override
   _PreviewPageState createState() => _PreviewPageState();
@@ -16,23 +15,22 @@ class PreviewPage extends StatefulWidget {
 class _PreviewPageState extends State<PreviewPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-var fromFirestoreForPreview;
+  var fromFirestoreForPreview;
 
-void initState() {
-  print("enter");
+  void initState() {
+    print("enter");
     fromFirestoreForPreview = getPosts();
-   // global.dataPreview = fromFirestoreForPreview;
+    // global.dataPreview = fromFirestoreForPreview;
     print(fromFirestoreForPreview);
     print("init_fromFirestoreForPreview");
   }
 
-
- Future getPosts() async {
+  Future getPosts() async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore
         .collection("Students")
         .where("profileStatus", isEqualTo: "complete")
-        .where("applicationId", isEqualTo: "96560002")
+        .where("applicationId", isEqualTo: global.currentUserId)
         .getDocuments();
     return qn.documents;
   }
@@ -71,46 +69,42 @@ void initState() {
         backgroundColor: ThemeHelper.backgroundRed,
         body: SingleChildScrollView(
             child: Container(
-          color: Colors.white10, //ThemeHelper.backgroundRed,
-          margin: context.isMobile
-              ? EdgeInsets.fromLTRB(8, 10, 8, 20)
-              : EdgeInsets.fromLTRB(100, 20, 100, 100),
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-           child: FutureBuilder<dynamic>(
+                color: Colors.white10, //ThemeHelper.backgroundRed,
+                margin: context.isMobile
+                    ? EdgeInsets.fromLTRB(8, 10, 8, 20)
+                    : EdgeInsets.fromLTRB(100, 20, 100, 100),
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height,
+                child: FutureBuilder<dynamic>(
                     future: fromFirestoreForPreview,
                     builder: (_, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Container(
-                          width: 150,
-                          height:150,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                            CircularProgressIndicator(),
-                            Text("\nPlease wait..")
-                          ],)
-                          
-                          );
+                            width: 150,
+                            height: 150,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(),
+                                Text("\nPlease wait..")
+                              ],
+                            ));
                       } else if (snapshot.connectionState ==
                           ConnectionState.done) {
-                          DocumentSnapshot ds;
-                          Map<String, dynamic> map;   
-                          print("clearing..");
-                          global.dataPreview = null;                          
-                          ds = snapshot.data[0];
-                          print(ds);
-                          map = ds.data;
-                          global.dataPreview = map;
+                        DocumentSnapshot ds;
+                        Map<String, dynamic> map;
+                        print("clearing..");
+                        global.dataPreview = null;
+                        print(snapshot.data);
+                        ds = snapshot.data[0];
+                        print(ds);
+                        map = ds.data;
+                        global.dataPreview = map;
 
-                          print(global.dataPreview);
-                          print("_______________*___________\n\n");
+                        print(global.dataPreview);
+                        print("_______________*___________\n\n");
                         return SinglePreview();
                       }
-                    })
-        )));
+                    }))));
   }
 }
-
-
-

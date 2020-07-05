@@ -37,7 +37,10 @@ class _SignInState extends State<SignIn> {
                   if (result.contains("start"))
                     {Navigator.pushReplacementNamed(context, "/dashboard")}
                   else if (result.contains("complete"))
-                    {}
+                    {
+                      Navigator.pushReplacementNamed(
+                          context, "/individualPreview")
+                    }
                 });
       } catch (error) {
         print("eeeeeeerr->" + error.toString());

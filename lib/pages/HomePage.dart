@@ -68,7 +68,6 @@ class _HomePageState extends State<HomePage> {
                   Image.asset(
                     'assets/images/logo.png',
                     width: ScreenUtil().setWidth(60),
-                    // height: ,
                   ),
                 ],
               )),
@@ -88,7 +87,6 @@ class _HomePageState extends State<HomePage> {
                   elevation: 10,
                   child: Container(
                     width: double.infinity,
-                    // height: 310,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage("assets/images/4330.gif"),

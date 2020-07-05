@@ -31,6 +31,7 @@ dependencies:
   toast: ^0.1.5
   loading_overlay: ^0.2.1
   mailer: ^3.0.4
+  slimy_card: ^1.0.4
 
 
 
@@ -74,6 +75,14 @@ flutter:
     - assets/images/4330.gif
     - assets/images/4330_1.gif
     - assets/images/logo.png
+    - assets/picAboutPage/nimal1.jpeg
+    - assets/picAboutPage/nimal2.jpeg
+    - assets/picAboutPage/sneha.jpeg
+    - assets/picAboutPage/mary.jpeg
+    - assets/picAboutPage/jiril.jpeg
+    - assets/picAboutPage/dona.jpeg
+    - assets/picAboutPage/shyla.jpeg
+    
 
   # fonts:
   #   - family: SFProDisplayRegular

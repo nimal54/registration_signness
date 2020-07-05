@@ -83,7 +83,7 @@ class _SignUpState extends State<SignUp> {
                     "email": inputEmail,
                     "course": inputCourse,
                     "phone": inputPhoneNumber,
-                    "gender": inputGender,                    
+                    "gender": inputGender,
                     "quota": inputQuota,
                     "profileStatus": "start"
                   }),
@@ -91,6 +91,9 @@ class _SignUpState extends State<SignUp> {
                       .collection("id_Increment")
                       .document("id")
                       .updateData({'user_id': temp_id}).then((value) => {
+                            Toast.show("Registration Successfull", context,
+                                duration: Toast.LENGTH_LONG,
+                                gravity: Toast.CENTER),
                             _popupAndSaveBasicDetailsToFirestore(
                                 context, AlertDialogType.SUCCESS),
                             Navigator.pushReplacementNamed(context, "/home")

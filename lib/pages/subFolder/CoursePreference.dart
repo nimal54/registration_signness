@@ -21,15 +21,8 @@ class _CoursePreferenceState extends State<CoursePreference> {
   Function callback;
   _CoursePreferenceState(this.callback);
 
-  @override
-  void initState() {
-    _educationalInformation = EducationalInformation(this.callback);
-  }
-
   bool _isLoading = false;
   final _formKey = new GlobalKey<FormState>();
-
-  EducationalInformation _educationalInformation;
 
   String _pCourse1, _pCourse2, _pCourse3;
 
@@ -117,9 +110,7 @@ class _CoursePreferenceState extends State<CoursePreference> {
           "coursePref": p_course,
           "profileStatus": "complete"
         }).then((value) => {
-                  this
-                      .widget
-                      .callback(new EducationalInformation(this.callback))
+                  Navigator.pushReplacementNamed(context, "/individualPreview")
                 });
         setState(() {
           _isLoading = false;

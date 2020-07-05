@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:registration/pages/subFolder/EducationalInformation.dart';
-import 'package:registration/pages/subFolder/dashboard_workspace.dart';
 import 'package:toast/toast.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:loading_overlay/loading_overlay.dart';
